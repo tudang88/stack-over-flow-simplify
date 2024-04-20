@@ -45,7 +45,7 @@
                 android:src="@drawable/checked"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txtScore"
-                />
+                android:contentDescription="@string/answer_status_icon" />
             <ImageView
                 android:id="@+id/imgAnswer"
                 android:layout_width="30dp"
@@ -54,11 +54,12 @@
                 android:src="@drawable/chat"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imgAnswerStatus"
-                />
+                android:contentDescription="@string/answer_count_icon" />
             <TextView
                 android:id="@+id/txtAnswerCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
                 android:textSize="24sp"
                 tools:text="0"
                 app:layout_constraintTop_toTopOf="@id/imgAnswer"
@@ -73,12 +74,13 @@
                 android:src="@drawable/eyes"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txtAnswerCount"
-                />
+                android:contentDescription="@string/view_count_icon" />
             <TextView
                 android:id="@+id/txtViewCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
+                android:layout_marginHorizontal="8dp"
                 tools:text="0"
                 app:layout_constraintTop_toTopOf="@id/imgView"
                 app:layout_constraintStart_toEndOf="@id/imgView"
@@ -99,7 +101,6 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="8dp"
-                android:src="@drawable/avatar"
                 tools:src="@drawable/avatar"
                 app:layout_constraintTop_toBottomOf="@+id/txtListItemTitle"
                 app:layout_constraintStart_toStartOf="parent"

@@ -5,5 +5,8 @@
     <string name="question_score_icon">Question Score Icon</string>
     <string name="owner_avatar">Owner avatar</string>
     <string name="owner_reputation">Owner Reputation</string>
+    <string name="answer_status_icon">Answer Status Icon</string>
+    <string name="answer_count_icon">Answer count icon</string>
+    <string name="view_count_icon">View Count Icon</string>
 
 </resources>
