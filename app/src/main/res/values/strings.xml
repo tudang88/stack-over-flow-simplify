@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Stack Over Flow Client</string>
     <string name="sample_title">Sample title</string>
+    <string name="network_failed">Network failure!</string>
+    <string name="question_score_icon">Question Score Icon</string>
+    <string name="owner_avatar">Owner avatar</string>
+    <string name="owner_reputation">Owner Reputation</string>
+
 </resources>
