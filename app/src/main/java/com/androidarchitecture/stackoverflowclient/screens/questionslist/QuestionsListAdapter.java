@@ -9,18 +9,25 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.androidarchitecture.stackoverflowclient.R;
 import com.androidarchitecture.stackoverflowclient.questions.Question;
-import com.androidarchitecture.stackoverflowclient.questions.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * Todo: refactor to use ArrayAdapter<Question> to
+ * get rid of managing List<Question> manually
+ */
 public class QuestionsListAdapter extends BaseAdapter {
     private List<Question> mQuestionsList;
+    private OnQuestionItemClickListener listener;
 
-    public QuestionsListAdapter(List<Question> questionsList) {
+    public QuestionsListAdapter(List<Question> questionsList, OnQuestionItemClickListener listener) {
         this.mQuestionsList = questionsList;
+        this.listener = listener;
     }
 
     @Override
@@ -71,6 +78,11 @@ public class QuestionsListAdapter extends BaseAdapter {
         ((TextView) convertView.findViewById(R.id.txtOwnerReputation))
                 .setText(String.valueOf(((Question) getItem(i)).getOwner().getReputation()));
 
+        // set delegate click event
+        ConstraintLayout qLayout = convertView.findViewById(R.id.layoutQuestion);
+        Question item = (Question) getItem(i);
+        qLayout.setOnClickListener(view -> listener.onQuestionClicked(item));
+
         return convertView;
     }
 
@@ -80,5 +92,12 @@ public class QuestionsListAdapter extends BaseAdapter {
 
     public List<Question> getQuestionsList() {
         return mQuestionsList;
+    }
+
+    /**
+     * callback when user click on item
+     */
+    public interface OnQuestionItemClickListener {
+        void onQuestionClicked(Question item);
     }
 }

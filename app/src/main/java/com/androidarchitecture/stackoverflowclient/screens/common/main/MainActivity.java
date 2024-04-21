@@ -1,4 +1,4 @@
-package com.androidarchitecture.stackoverflowclient;
+package com.androidarchitecture.stackoverflowclient.screens.common.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.androidarchitecture.stackoverflowclient.R;
 import com.androidarchitecture.stackoverflowclient.common.Constants;
 import com.androidarchitecture.stackoverflowclient.networking.StackoverflowApi;
 import com.androidarchitecture.stackoverflowclient.networking.StackoverflowApiService;
@@ -15,6 +16,7 @@ import com.androidarchitecture.stackoverflowclient.networking.questions.Question
 import com.androidarchitecture.stackoverflowclient.networking.questions.QuestionSchema;
 import com.androidarchitecture.stackoverflowclient.questions.Question;
 import com.androidarchitecture.stackoverflowclient.questions.User;
+import com.androidarchitecture.stackoverflowclient.screens.common.controllers.BaseActivity;
 import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListAdapter;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements QuestionsListAdapter.OnQuestionItemClickListener {
     private final String TAG = MainActivity.class.getSimpleName();
     private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
     private QuestionsListAdapter mQuestionListAdapter;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // setup adapter for list view
         ListView mListView = findViewById(R.id.questionListView);
-        mQuestionListAdapter = new QuestionsListAdapter(new ArrayList<Question>());
+        mQuestionListAdapter = new QuestionsListAdapter(new ArrayList<Question>(), this);
         mListView.setAdapter(mQuestionListAdapter);
     }
 
@@ -89,5 +91,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void networkFailure() {
         Toast.makeText(this, R.string.network_failed, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * onClick question item
+     * @param item
+     */
+    @Override
+    public void onQuestionClicked(Question item) {
+        Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }
