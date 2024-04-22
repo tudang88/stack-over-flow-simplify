@@ -1,6 +1,7 @@
 package com.androidarchitecture.stackoverflowclient.screens.questionslist;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,43 +46,81 @@ public class QuestionsListAdapter extends BaseAdapter {
         return 0;
     }
 
+    /**
+     * Apply the ViewHolder pattern
+     * to reduce the findViewById frequency
+     */
+    private static class ViewHolder {
+        private TextView txtTitle;
+        private TextView txtScore;
+        private ImageView imgAnswerStatus;
+        private TextView txtAnswerCount;
+        private TextView txtViewCount;
+        private ImageView imgOwnerAvatar;
+        private TextView txtOwnerName;
+        private TextView txtOwnerReputation;
+
+        /**
+         * binding view to viewHolder
+         *
+         * @param convertView
+         */
+        void bindingView(View convertView) {
+            txtTitle = convertView.findViewById(R.id.txtListItemTitle);
+            txtScore = convertView.findViewById(R.id.txtScore);
+            imgAnswerStatus = convertView.findViewById(R.id.imgAnswerStatus);
+            txtAnswerCount = convertView.findViewById(R.id.txtAnswerCount);
+            txtViewCount = convertView.findViewById(R.id.txtViewCount);
+            // owner area
+            imgOwnerAvatar = convertView.findViewById(R.id.imgOwnerAvatar);
+            txtOwnerName = convertView.findViewById(R.id.txtOwnerName);
+            txtOwnerReputation = convertView.findViewById(R.id.txtOwnerReputation);
+
+        }
+
+        /**
+         * binding data to view holder
+         *
+         * @param item
+         */
+        void bindingData(Question item, Context context) {
+            txtTitle.setText(item.getTitle());
+            txtScore.setText(String.valueOf(item.getScore()));
+            // get answer status icon
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable checkDrawable =
+                    context.getDrawable(item.isAnswer() ?
+                            R.drawable.checked :
+                            R.drawable.checked_inactive);
+            imgAnswerStatus.setImageDrawable(checkDrawable);
+            txtAnswerCount.setText(String.valueOf(item.getAnswerCount()));
+            txtViewCount.setText(String.valueOf(item.getViewCount()));
+
+            // owner area
+            String avatarUrl = item.getOwner().getUserAvatarUrl();
+            Picasso.with(context).load(avatarUrl).into(imgOwnerAvatar);
+            txtOwnerName.setText((item.getOwner().getUserDisplayName()));
+            txtOwnerReputation.setText(String.valueOf(item.getOwner().getReputation()));
+        }
+
+    }
+
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         if (convertView == null) {
             convertView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.list_item_design, viewGroup, false);
+            // binding view to ViewHolder
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.bindingView(convertView);
+            convertView.setTag(viewHolder);
         }
         final Question item = (Question) getItem(i);
-
-        // set title to layout
-        ((TextView) convertView.findViewById(R.id.txtListItemTitle))
-                .setText(item.getTitle());
-        ((TextView) convertView.findViewById(R.id.txtScore))
-                .setText(String.valueOf(item.getScore()));
-        // get answer status icon
-        @SuppressLint("UseCompatLoadingForDrawables") Drawable checkDrawable =
-                viewGroup.getContext().getDrawable(item.isAnswer() ?
-                        R.drawable.checked :
-                        R.drawable.checked_inactive);
-        ((ImageView) convertView.findViewById(R.id.imgAnswerStatus))
-                .setImageDrawable(checkDrawable);
-        ((TextView) convertView.findViewById(R.id.txtAnswerCount))
-                .setText(String.valueOf(item.getAnswerCount()));
-        ((TextView) convertView.findViewById(R.id.txtViewCount))
-                .setText(String.valueOf(item.getViewCount()));
-
-        // owner area
-        ImageView avatar = convertView.findViewById(R.id.imgOwnerAvatar);
-        String avatarUrl = item.getOwner().getUserAvatarUrl();
-        Picasso.with(viewGroup.getContext()).load(avatarUrl).into(avatar);
-        ((TextView) convertView.findViewById(R.id.txtOwnerName))
-                .setText((item.getOwner().getUserDisplayName()));
-        ((TextView) convertView.findViewById(R.id.txtOwnerReputation))
-                .setText(String.valueOf(item.getOwner().getReputation()));
-
+        // binding data
+        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+        viewHolder.bindingData(item, convertView.getContext());
         // set delegate click event
-        convertView.setOnClickListener(view-> listener.onQuestionClicked(item));
+        convertView.setOnClickListener(view -> listener.onQuestionClicked(item));
         return convertView;
     }
 
