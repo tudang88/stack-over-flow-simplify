@@ -22,9 +22,9 @@ import java.util.List;
  * Todo: refactor to use ArrayAdapter<Question> to
  * get rid of managing List<Question> manually
  */
-public class QuestionsListAdapter extends BaseAdapter {
+public class QuestionsListAdapter extends BaseAdapter implements QuestionItemViewMvc.Listener {
     private List<Question> mQuestionsList;
-    private OnQuestionItemClickListener listener;
+    private final OnQuestionItemClickListener listener;
 
     public QuestionsListAdapter(List<Question> questionsList, OnQuestionItemClickListener listener) {
         this.mQuestionsList = questionsList;
@@ -46,81 +46,19 @@ public class QuestionsListAdapter extends BaseAdapter {
         return 0;
     }
 
-    /**
-     * Apply the ViewHolder pattern
-     * to reduce the findViewById frequency
-     */
-    private static class ViewHolder {
-        private TextView txtTitle;
-        private TextView txtScore;
-        private ImageView imgAnswerStatus;
-        private TextView txtAnswerCount;
-        private TextView txtViewCount;
-        private ImageView imgOwnerAvatar;
-        private TextView txtOwnerName;
-        private TextView txtOwnerReputation;
-
-        /**
-         * binding view to viewHolder
-         *
-         * @param convertView
-         */
-        void bindingView(View convertView) {
-            txtTitle = convertView.findViewById(R.id.txtListItemTitle);
-            txtScore = convertView.findViewById(R.id.txtScore);
-            imgAnswerStatus = convertView.findViewById(R.id.imgAnswerStatus);
-            txtAnswerCount = convertView.findViewById(R.id.txtAnswerCount);
-            txtViewCount = convertView.findViewById(R.id.txtViewCount);
-            // owner area
-            imgOwnerAvatar = convertView.findViewById(R.id.imgOwnerAvatar);
-            txtOwnerName = convertView.findViewById(R.id.txtOwnerName);
-            txtOwnerReputation = convertView.findViewById(R.id.txtOwnerReputation);
-
-        }
-
-        /**
-         * binding data to view holder
-         *
-         * @param item
-         */
-        void bindingData(Question item, Context context) {
-            txtTitle.setText(item.getTitle());
-            txtScore.setText(String.valueOf(item.getScore()));
-            // get answer status icon
-            @SuppressLint("UseCompatLoadingForDrawables") Drawable checkDrawable =
-                    context.getDrawable(item.isAnswer() ?
-                            R.drawable.checked :
-                            R.drawable.checked_inactive);
-            imgAnswerStatus.setImageDrawable(checkDrawable);
-            txtAnswerCount.setText(String.valueOf(item.getAnswerCount()));
-            txtViewCount.setText(String.valueOf(item.getViewCount()));
-
-            // owner area
-            String avatarUrl = item.getOwner().getUserAvatarUrl();
-            Picasso.with(context).load(avatarUrl).into(imgOwnerAvatar);
-            txtOwnerName.setText((item.getOwner().getUserDisplayName()));
-            txtOwnerReputation.setText(String.valueOf(item.getOwner().getReputation()));
-        }
-
-    }
-
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         if (convertView == null) {
-            convertView = LayoutInflater.
-                    from(viewGroup.getContext()).
-                    inflate(R.layout.list_item_design, viewGroup, false);
-            // binding view to ViewHolder
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.bindingView(convertView);
-            convertView.setTag(viewHolder);
+            QuestionItemViewMvc mvcView = new QuestionItemViewMvcImpl(LayoutInflater.from(viewGroup.getContext()), viewGroup);
+            // register item click listener
+            mvcView.registerListener(this);
+            convertView = mvcView.getRootView();
+            convertView.setTag(mvcView);
         }
         final Question item = (Question) getItem(i);
         // binding data
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.bindingData(item, convertView.getContext());
-        // set delegate click event
-        convertView.setOnClickListener(view -> listener.onQuestionClicked(item));
+        QuestionItemViewMvc itemViewMvc = (QuestionItemViewMvc) convertView.getTag();
+        itemViewMvc.bindQuestion(item);
         return convertView;
     }
 
@@ -128,8 +66,9 @@ public class QuestionsListAdapter extends BaseAdapter {
         this.mQuestionsList = questionsList;
     }
 
-    public List<Question> getQuestionsList() {
-        return mQuestionsList;
+    @Override
+    public void onQuestionClicked(Question question) {
+        listener.onQuestionClicked(question);
     }
 
     /**

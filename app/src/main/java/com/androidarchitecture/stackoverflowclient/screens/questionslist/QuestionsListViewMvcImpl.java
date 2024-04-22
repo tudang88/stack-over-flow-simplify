@@ -30,8 +30,6 @@ public class QuestionsListViewMvcImpl implements
     /**
      * extract the view implementation of
      * main activity to MVC view
-     * @param inflater
-     * @param parent
      */
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup parent) {
         mvcRootView = inflater.inflate(R.layout.activity_main, parent, false);
