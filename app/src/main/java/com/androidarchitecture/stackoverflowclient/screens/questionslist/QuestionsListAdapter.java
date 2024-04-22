@@ -52,37 +52,36 @@ public class QuestionsListAdapter extends BaseAdapter {
                     from(viewGroup.getContext()).
                     inflate(R.layout.list_item_design, viewGroup, false);
         }
+        final Question item = (Question) getItem(i);
+
         // set title to layout
         ((TextView) convertView.findViewById(R.id.txtListItemTitle))
-                .setText(((Question) getItem(i)).getTitle());
+                .setText(item.getTitle());
         ((TextView) convertView.findViewById(R.id.txtScore))
-                .setText(String.valueOf(((Question) getItem(i)).getScore()));
+                .setText(String.valueOf(item.getScore()));
         // get answer status icon
         @SuppressLint("UseCompatLoadingForDrawables") Drawable checkDrawable =
-                viewGroup.getContext().getDrawable(((Question) getItem(i)).isAnswer() ?
+                viewGroup.getContext().getDrawable(item.isAnswer() ?
                         R.drawable.checked :
                         R.drawable.checked_inactive);
         ((ImageView) convertView.findViewById(R.id.imgAnswerStatus))
                 .setImageDrawable(checkDrawable);
         ((TextView) convertView.findViewById(R.id.txtAnswerCount))
-                .setText(String.valueOf(((Question) getItem(i)).getAnswerCount()));
+                .setText(String.valueOf(item.getAnswerCount()));
         ((TextView) convertView.findViewById(R.id.txtViewCount))
-                .setText(String.valueOf(((Question) getItem(i)).getViewCount()));
+                .setText(String.valueOf(item.getViewCount()));
 
         // owner area
         ImageView avatar = convertView.findViewById(R.id.imgOwnerAvatar);
-        String avatarUrl = ((Question) getItem(i)).getOwner().getUserAvatarUrl();
+        String avatarUrl = item.getOwner().getUserAvatarUrl();
         Picasso.with(viewGroup.getContext()).load(avatarUrl).into(avatar);
         ((TextView) convertView.findViewById(R.id.txtOwnerName))
-                .setText((((Question) getItem(i)).getOwner().getUserDisplayName()));
+                .setText((item.getOwner().getUserDisplayName()));
         ((TextView) convertView.findViewById(R.id.txtOwnerReputation))
-                .setText(String.valueOf(((Question) getItem(i)).getOwner().getReputation()));
+                .setText(String.valueOf(item.getOwner().getReputation()));
 
         // set delegate click event
-        ConstraintLayout qLayout = convertView.findViewById(R.id.layoutQuestion);
-        Question item = (Question) getItem(i);
-        qLayout.setOnClickListener(view -> listener.onQuestionClicked(item));
-
+        convertView.setOnClickListener(view-> listener.onQuestionClicked(item));
         return convertView;
     }
 

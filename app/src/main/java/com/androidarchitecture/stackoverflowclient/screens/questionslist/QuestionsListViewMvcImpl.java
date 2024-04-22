@@ -13,21 +13,20 @@ import java.util.List;
 
 public class QuestionsListViewMvcImpl implements
         QuestionsListAdapter.OnQuestionItemClickListener,
-        ObservableViewMvc<QuestionsListViewMvc.OnQuestionClickedListener>,
-        QuestionsListViewMvc {
+        QuestionsListViewMvc<QuestionsListViewMvc.Listener> {
     @Override
-    public void registerListener(QuestionsListViewMvcImpl.OnQuestionClickedListener listener) {
+    public void registerListener(Listener listener) {
         mObservers.add(listener);
     }
 
     @Override
-    public void unregisterListener(QuestionsListViewMvcImpl.OnQuestionClickedListener listener) {
+    public void unregisterListener(Listener listener) {
         mObservers.remove(listener);
     }
 
     private final View mvcRootView;
     private final QuestionsListAdapter mQuestionListAdapter;
-    private final List<OnQuestionClickedListener> mObservers = new ArrayList<>();
+    private final List<Listener> mObservers = new ArrayList<>();
     /**
      * extract the view implementation of
      * main activity to MVC view
@@ -53,7 +52,7 @@ public class QuestionsListViewMvcImpl implements
 
     @Override
     public void onQuestionClicked(Question item) {
-        for(OnQuestionClickedListener listener: mObservers) {
+        for(Listener listener: mObservers) {
             listener.onQuestionClicked(item);
         }
     }

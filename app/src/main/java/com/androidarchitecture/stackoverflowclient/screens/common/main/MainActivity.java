@@ -15,6 +15,7 @@ import com.androidarchitecture.stackoverflowclient.networking.questions.Question
 import com.androidarchitecture.stackoverflowclient.questions.Question;
 import com.androidarchitecture.stackoverflowclient.questions.User;
 import com.androidarchitecture.stackoverflowclient.screens.common.controllers.BaseActivity;
+import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListViewMvc;
 import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListViewMvcImpl;
 
 import java.util.ArrayList;
@@ -24,10 +25,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements QuestionsListViewMvcImpl.OnQuestionClickedListener {
+public class MainActivity extends BaseActivity implements QuestionsListViewMvc.Listener {
     private final String TAG = MainActivity.class.getSimpleName();
     private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
-    private QuestionsListViewMvcImpl mQuestionsListMvcView;
+    private QuestionsListViewMvc<QuestionsListViewMvc.Listener> mQuestionsListMvcView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

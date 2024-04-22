@@ -6,11 +6,12 @@ import com.androidarchitecture.stackoverflowclient.questions.Question;
 
 import java.util.List;
 
-public interface QuestionsListViewMvc {
-    interface OnQuestionClickedListener {
+public interface QuestionsListViewMvc<ListenerType> {
+    interface Listener {
         void onQuestionClicked(Question q);
     }
-
+    void registerListener(ListenerType listener);
+    void unregisterListener(ListenerType listener);
     View getMvcRootView();
 
     void bindQuestions(List<Question> questions);
