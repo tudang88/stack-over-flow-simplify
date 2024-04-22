@@ -1,11 +1,9 @@
 package com.androidarchitecture.stackoverflowclient.screens.common.main;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidarchitecture.stackoverflowclient.R;
@@ -17,8 +15,7 @@ import com.androidarchitecture.stackoverflowclient.networking.questions.Question
 import com.androidarchitecture.stackoverflowclient.questions.Question;
 import com.androidarchitecture.stackoverflowclient.questions.User;
 import com.androidarchitecture.stackoverflowclient.screens.common.controllers.BaseActivity;
-import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListAdapter;
-import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListViewMvc;
+import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListViewMvcImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +24,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements QuestionsListViewMvc.OnQuestionClickedListener {
+public class MainActivity extends BaseActivity implements QuestionsListViewMvcImpl.OnQuestionClickedListener {
     private final String TAG = MainActivity.class.getSimpleName();
     private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
-    private QuestionsListViewMvc mQuestionsListMvcView;
+    private QuestionsListViewMvcImpl mQuestionsListMvcView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mQuestionsListMvcView = new QuestionsListViewMvc(getLayoutInflater(), null);
+        mQuestionsListMvcView = new QuestionsListViewMvcImpl(getLayoutInflater(), null);
         mQuestionsListMvcView.registerListener(this);
         setContentView(mQuestionsListMvcView.getMvcRootView());
 
