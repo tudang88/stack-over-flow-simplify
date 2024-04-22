@@ -18,6 +18,7 @@ import com.androidarchitecture.stackoverflowclient.questions.Question;
 import com.androidarchitecture.stackoverflowclient.questions.User;
 import com.androidarchitecture.stackoverflowclient.screens.common.controllers.BaseActivity;
 import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListAdapter;
+import com.androidarchitecture.stackoverflowclient.screens.questionslist.QuestionsListViewMvc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +27,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements QuestionsListAdapter.OnQuestionItemClickListener {
+public class MainActivity extends BaseActivity implements QuestionsListViewMvc.OnQuestionClickedListener {
     private final String TAG = MainActivity.class.getSimpleName();
     private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
-    private QuestionsListAdapter mQuestionListAdapter;
+    private QuestionsListViewMvc mQuestionsListMvcView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mQuestionsListMvcView = new QuestionsListViewMvc(getLayoutInflater(), null);
+        mQuestionsListMvcView.registerListener(this);
+        setContentView(mQuestionsListMvcView.getMvcRootView());
 
-        // setup adapter for list view
-        ListView mListView = findViewById(R.id.questionListView);
-        mQuestionListAdapter = new QuestionsListAdapter(new ArrayList<Question>(), this);
-        mListView.setAdapter(mQuestionListAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mQuestionsListMvcView.unregisterListener(this);
     }
 
     private void fetchQuestionList() {
@@ -83,10 +88,7 @@ public class MainActivity extends BaseActivity implements QuestionsListAdapter.O
                             q.getOwner().getReputation())));
         }
         // update adapter
-        mQuestionListAdapter.getQuestionsList().clear();
-        mQuestionListAdapter.getQuestionsList().addAll(questions);
-        mQuestionListAdapter.notifyDataSetChanged();
-
+        mQuestionsListMvcView.bindQuestions(questions);
     }
 
     private void networkFailure() {
@@ -95,6 +97,7 @@ public class MainActivity extends BaseActivity implements QuestionsListAdapter.O
 
     /**
      * onClick question item
+     *
      * @param item
      */
     @Override
