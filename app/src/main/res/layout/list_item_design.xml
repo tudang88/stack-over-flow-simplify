@@ -4,18 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="4dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_tiny"
+        android:layout_marginTop="@dimen/margin_tiny"
+        android:layout_marginEnd="@dimen/margin_tiny"
+        android:layout_marginBottom="@dimen/margin_tiny"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutQuestion"
+            android:padding="@dimen/margin_tiny"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView

@@ -3,7 +3,8 @@ package com.androidarchitecture.stackoverflowclient.screens.questionslist;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidarchitecture.stackoverflowclient.R;
 import com.androidarchitecture.stackoverflowclient.questions.Question;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionsListViewMvcImpl implements
-        QuestionsListAdapter.OnQuestionItemClickListener,
+        QuestionListRecyclerViewAdapter.QuestionClickListener,
         QuestionsListViewMvc<QuestionsListViewMvc.Listener> {
     @Override
     public void registerListener(Listener listener) {
@@ -25,7 +26,7 @@ public class QuestionsListViewMvcImpl implements
     }
 
     private final View mvcRootView;
-    private final QuestionsListAdapter mQuestionListAdapter;
+    private final QuestionListRecyclerViewAdapter mQuestionListAdapter;
     private final List<Listener> mObservers = new ArrayList<>();
     /**
      * extract the view implementation of
@@ -34,8 +35,8 @@ public class QuestionsListViewMvcImpl implements
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup parent) {
         mvcRootView = inflater.inflate(R.layout.activity_main, parent, false);
         // setup adapter for list view
-        ListView mListView = findViewById(R.id.questionListView);
-        mQuestionListAdapter = new QuestionsListAdapter(new ArrayList<>(), this);
+        RecyclerView mListView = findViewById(R.id.questionListView);
+        mQuestionListAdapter = new QuestionListRecyclerViewAdapter(this);
         mListView.setAdapter(mQuestionListAdapter);
     }
 
@@ -62,8 +63,7 @@ public class QuestionsListViewMvcImpl implements
      */
     @Override
     public void bindQuestions(List<Question> questions) {
-        mQuestionListAdapter.setQuestionsList(questions);
-        mQuestionListAdapter.notifyDataSetChanged();
+        mQuestionListAdapter.submitList(questions);
 
     }
 }
