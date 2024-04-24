@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity implements QuestionsListViewMvc.L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mQuestionsListMvcView = new QuestionsListViewMvcImpl(getLayoutInflater(), null);
+        mQuestionsListMvcView = getCompositionRoot().getMvcViewFactory().getQuestionsListViewMvc(null);
         mQuestionsListMvcView.registerListener(this);
         setContentView(mQuestionsListMvcView.getRootView());
         mService = getCompositionRoot().getStackOverService();

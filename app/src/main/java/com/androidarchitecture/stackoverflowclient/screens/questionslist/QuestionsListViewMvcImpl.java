@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidarchitecture.stackoverflowclient.R;
 import com.androidarchitecture.stackoverflowclient.questions.Question;
 import com.androidarchitecture.stackoverflowclient.screens.common.BaseObservableViewMvc;
+import com.androidarchitecture.stackoverflowclient.screens.common.MvcViewFactory;
 
 import java.util.List;
 
@@ -21,11 +22,11 @@ public class QuestionsListViewMvcImpl
      * extract the view implementation of
      * main activity to MVC view
      */
-    public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup parent) {
+    public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup parent, MvcViewFactory factory) {
         setRootView(inflater.inflate(R.layout.activity_main, parent, false));
         // setup adapter for list view
         RecyclerView mListView = findViewById(R.id.questionListView);
-        mQuestionListAdapter = new QuestionListRecyclerViewAdapter(this);
+        mQuestionListAdapter = new QuestionListRecyclerViewAdapter(this, factory);
         mListView.setAdapter(mQuestionListAdapter);
     }
 

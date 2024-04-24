@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidarchitecture.stackoverflowclient.questions.Question;
+import com.androidarchitecture.stackoverflowclient.screens.common.MvcViewFactory;
 
 import java.util.Objects;
 
@@ -17,12 +18,14 @@ public class QuestionListRecyclerViewAdapter extends ListAdapter<Question, Quest
 implements QuestionItemViewMvc.Listener{
 
     private final QuestionClickListener listener;
+    private final MvcViewFactory mFactory;
     /**
      * Public constructor
      */
-    public QuestionListRecyclerViewAdapter(QuestionClickListener listener) {
+    public QuestionListRecyclerViewAdapter(QuestionClickListener listener, MvcViewFactory factory) {
         super(new QuestionDiffCallback());
         this.listener = listener;
+        this.mFactory = factory;
     }
 
     @Override
@@ -64,8 +67,7 @@ implements QuestionItemViewMvc.Listener{
     @NonNull
     @Override
     public QuestionListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        QuestionItemViewMvc itemViewMvc = new QuestionItemViewMvcImpl(inflater, parent);
+        QuestionItemViewMvc itemViewMvc = mFactory.getQuestionItemViewMvc(parent);
         // register subscriber to item click event
         itemViewMvc.registerListener(this);
         return new QuestionListViewHolder(itemViewMvc);
