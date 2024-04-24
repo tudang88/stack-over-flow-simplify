@@ -28,14 +28,14 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity implements QuestionsListViewMvc.Listener {
     private final String TAG = MainActivity.class.getSimpleName();
     private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
-    private QuestionsListViewMvc<QuestionsListViewMvc.Listener> mQuestionsListMvcView;
+    private QuestionsListViewMvc mQuestionsListMvcView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mQuestionsListMvcView = new QuestionsListViewMvcImpl(getLayoutInflater(), null);
         mQuestionsListMvcView.registerListener(this);
-        setContentView(mQuestionsListMvcView.getMvcRootView());
+        setContentView(mQuestionsListMvcView.getRootView());
 
     }
 
