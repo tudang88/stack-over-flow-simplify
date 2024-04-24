@@ -27,7 +27,7 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements QuestionsListViewMvc.Listener {
     private final String TAG = MainActivity.class.getSimpleName();
-    private final StackoverflowApi mService = StackoverflowApiService.getInstance().getService();
+    private StackoverflowApi mService;
     private QuestionsListViewMvc mQuestionsListMvcView;
 
     @Override
@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity implements QuestionsListViewMvc.L
         mQuestionsListMvcView = new QuestionsListViewMvcImpl(getLayoutInflater(), null);
         mQuestionsListMvcView.registerListener(this);
         setContentView(mQuestionsListMvcView.getRootView());
-
+        mService = getCompositionRoot().getStackOverService();
     }
 
     @Override
